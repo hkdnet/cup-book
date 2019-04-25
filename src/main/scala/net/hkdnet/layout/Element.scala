@@ -19,10 +19,29 @@ abstract class Element {
     )
   }
 
-  override def toString: String = contents mkString("\n")
+  override def toString: String = contents mkString ("\n")
+
+  def widen(w: Int): Element = {
+    if (w <= width) this
+    else {
+      val left = Element.elem(' ', (w - width) / 2, height)
+      val right = Element.elem(' ', w - width - left.width, height)
+      left beside this beside right
+    }
+  }
+
+  def heighten(h: Int): Element = {
+    if (h <= height) this
+    else {
+      val top = Element.elem(' ', width, (h - height) / 2)
+      val bot = Element.elem(' ', width, h - height - top.height)
+      top above this above bot
+    }
+  }
 }
 
 object Element {
+
   private class ArrayElement(val contents: Array[String]) extends Element {
   }
 
@@ -41,6 +60,8 @@ object Element {
   }
 
   def elem(contents: Array[String]): Element = new ArrayElement(contents)
-  def elem(chr: Char, width: Int, height: Int):Element = new UniformElement(chr, width, height)
+
+  def elem(chr: Char, width: Int, height: Int): Element = new UniformElement(chr, width, height)
+
   def elem(line: String): Element = new LineElement(line)
 }
