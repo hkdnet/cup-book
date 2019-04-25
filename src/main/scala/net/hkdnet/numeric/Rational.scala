@@ -16,6 +16,13 @@ class Rational(a: Int, b: Int) {
     return gcd(y, x % y)
   }
 
+  override def equals(obj: Any): Boolean = obj match  {
+    case that: Rational => numer == that.numer && denom == that.denom
+    case _ => false
+  }
+
+  override def hashCode(): Int = (numer, denom).##
+
   def +(that: Rational): Rational = new Rational(numer * that.denom + that.numer * denom, denom * that.denom)
 
   def +(n: Int): Rational = this + new Rational(n)
