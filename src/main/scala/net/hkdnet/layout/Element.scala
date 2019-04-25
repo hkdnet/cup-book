@@ -8,13 +8,13 @@ abstract class Element {
   def height: Int = contents.length
 
   def above(that: Element): Element = {
-    Element.elem(contents ++ that.contents)
+    Element.elem(this.widen(that.width).contents ++ that.widen(width).contents)
   }
 
   def beside(that: Element): Element = {
     Element.elem(
       for (
-        (line1, line2) <- this.contents zip that.contents
+        (line1, line2) <- this.heighten(that.height).contents zip that.heighten(height).contents
       ) yield line1 + line2
     )
   }
