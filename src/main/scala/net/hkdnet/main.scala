@@ -45,7 +45,12 @@ object Main {
         Number(1)
       )
       println(Expr.format(expr))
+      println(Expr.format(Number(1.0)))
       println(Expr.format(UnOp("-", Number(1))))
+      println(Expr.format(BinOp("/", Number(1), Var("x"))))
+      println(Expr.format(
+        BinOp("/", Var("y"),
+        BinOp("/", Number(1), Var("x")))))
     }
   }
 }
