@@ -1,5 +1,7 @@
 package net.hkdnet.numeric
 
+import net.hkdnet.layout.Element
+
 sealed abstract class Expr
 
 object Expr {
@@ -32,11 +34,11 @@ object Expr {
     case _ => expr
   }
 
-  def format(expr: Expr): String = expr match {
-    case Var(x) => x
-    case Number(n) => n.toString
-    case UnOp(o, e) => o + format(e)
-    case BinOp(o, l, r) => "(" + format(l) + o + format(r) + ")"
+  def format(expr: Expr): Element = expr match {
+    case Var(x) => Element.elem(x)
+    case Number(n) => Element.elem(n.toString)
+    case UnOp(o, e) => Element.elem(o) beside format(e)
+    case BinOp(o, l, r) => Element.elem("(") beside format(l) beside Element.elem(o) beside format(r) beside Element.elem(")")
     case _ => throw new RuntimeException("unknwon " + expr)
   }
 }
