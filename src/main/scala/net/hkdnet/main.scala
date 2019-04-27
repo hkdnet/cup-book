@@ -44,7 +44,7 @@ object Main {
           Var("z")),
         Number(1)
       )
-      println(expr)
+      println(Expr.format(expr))
     }
   }
 }

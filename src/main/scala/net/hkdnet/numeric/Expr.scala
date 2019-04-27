@@ -12,6 +12,13 @@ object Expr {
     case BinOp(o, l, r) => BinOp(o, simplify(l), simplify(r))
     case _ => expr
   }
+
+  def format(expr: Expr): String = expr match {
+    case Var(x) => x
+    case Number(n) => n.toString
+    case BinOp(o, l, r) => "(" + format(l) + o + format(r) + ")"
+    case _ => throw new RuntimeException("unknwon " + expr)
+  }
 }
 
 case class Var(name: String) extends Expr
