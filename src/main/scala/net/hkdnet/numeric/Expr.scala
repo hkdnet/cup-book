@@ -16,6 +16,7 @@ object Expr {
   def format(expr: Expr): String = expr match {
     case Var(x) => x
     case Number(n) => n.toString
+    case UnOp(o, e) => o + format(e)
     case BinOp(o, l, r) => "(" + format(l) + o + format(r) + ")"
     case _ => throw new RuntimeException("unknwon " + expr)
   }

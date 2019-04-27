@@ -45,6 +45,7 @@ object Main {
         Number(1)
       )
       println(Expr.format(expr))
+      println(Expr.format(UnOp("-", Number(1))))
     }
   }
 }
