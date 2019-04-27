@@ -3,6 +3,25 @@ package net.hkdnet.numeric
 sealed abstract class Expr
 
 object Expr {
+  private val opGroups =
+    Array(
+      Set("|", "||"),
+      Set("&", "&&"),
+      Set("^"),
+      Set("==", "!="),
+      Set("<", "<=", ">", ">="),
+      Set("+", "-"),
+      Set("*", "%")
+    )
+
+  private val precedence = {
+    val assocs = for {
+      i <- 0 until opGroups.length
+      op <- opGroups(i)
+    } yield op -> i
+    assocs.toMap
+  }
+
   def simplify(expr: Expr): Expr = expr match {
     case UnOp("-", UnOp("-", e)) => simplify(e)
     case UnOp("-", Number(e)) if e < 0 => simplify(Number(-e))
