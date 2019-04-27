@@ -8,6 +8,8 @@ object Expr {
     case UnOp("-", Number(e)) if e < 0 => simplify(Number(-e))
     case BinOp("+", e, Number(0)) => simplify(e)
     case BinOp("*", e, Number(1)) => simplify(e)
+    case UnOp(o, e) => UnOp(o, simplify(e))
+    case BinOp(o, l, r) => BinOp(o, simplify(l), simplify(r))
     case _ => expr
   }
 }
