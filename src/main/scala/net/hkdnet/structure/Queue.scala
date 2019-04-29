@@ -1,9 +1,15 @@
 package net.hkdnet.structure
 
-class Queue[T](val list: List[T]) {
-  def head: T = list.head
-  def tail: Queue[T] = new Queue(list.tail)
-  def enqueue(e: T): Queue[T] = new Queue[T](e::list)
+class Queue[T](private val r: List[T], private val s: List[T]) {
+  def this(list: List[T]) {
+    this(list.take(list.size / 2), list.drop(list.size / 2).reverse)
+  }
+  def head: T = r.head
+  def tail: Queue[T] = new Queue(r.tail, s)
+  def enqueue(e: T): Queue[T] = new Queue[T](r, e::s)
+  // TODO: rebalance...
 
-  override def toString: String = list.mkString("Queue<", ",", ">")
+  override def toString: String = {
+    "Queue<" + r.mkString(",") + s.reverse.mkString(",") + ">"
+  }
 }
