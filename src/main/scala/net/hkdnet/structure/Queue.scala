@@ -1,27 +1,27 @@
 package net.hkdnet.structure
 
-class Queue[T](private val r: List[T], private val s: List[T]) {
+class Queue[T](private val leading: List[T], private val trailing: List[T]) {
   def this(list: List[T]) {
     this(list.take(list.size / 2), list.drop(list.size / 2).reverse)
   }
 
   // TODO: rebalance...?
   private def mirror: Queue[T] = {
-    if (r.isEmpty) {
-      new Queue(s.reverse, Nil)
+    if (leading.isEmpty) {
+      new Queue(trailing.reverse, Nil)
     } else {
       this
     }
   }
 
-  def head: T = mirror.r.head
+  def head: T = mirror.leading.head
   def tail: Queue[T] = {
     val q = mirror
-    new Queue(q.r.tail, q.s)
+    new Queue(q.leading.tail, q.trailing)
   }
-  def enqueue(e: T): Queue[T] = new Queue[T](r, e::s)
+  def enqueue(e: T): Queue[T] = new Queue[T](leading, e::trailing)
 
   override def toString: String = {
-    "Queue<" + r.mkString(",") + s.reverse.mkString(",") + ">"
+    "Queue<" + leading.mkString(",") + trailing.reverse.mkString(",") + ">"
   }
 }
