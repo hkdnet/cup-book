@@ -1,13 +1,9 @@
 package net.hkdnet.structure
 
-class Queue(val list: List[Int]) {
-  def head: Int = list.head
-  def tail: Queue = new Queue(list.tail)
-  def enqueue(e: Int): Queue = new Queue(e::list)
+class Queue[T](val list: List[T]) {
+  def head: T = list.head
+  def tail: Queue[T] = new Queue(list.tail)
+  def enqueue(e: T): Queue[T] = new Queue[T](e::list)
 
   override def toString: String = list.mkString("Queue<", ",", ">")
-}
-
-object Queue {
-  def empty: Queue = new Queue(Nil)
 }
