@@ -54,10 +54,11 @@ object Main {
         BinOp("/", Number(1), Var("x")))))
     }
     case Array("queue") => {
-      val q = new Queue[Int](Nil)
+      val q = Queue[Int]()
       println(q)
       println(q.enqueue(1))
       println(q.enqueue(1).enqueue(2))
+      println(Queue(1, 2))
     }
   }
 }
