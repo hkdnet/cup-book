@@ -1,6 +1,6 @@
 package net.hkdnet.structure
 
-class Queue[T](private val leading: List[T], private val trailing: List[T]) {
+class Queue[T] private (private val leading: List[T], private val trailing: List[T]) {
   def this(list: List[T]) {
     this(list.take(list.size / 2), list.drop(list.size / 2).reverse)
   }
