@@ -2,6 +2,7 @@ package net.hkdnet
 
 import net.hkdnet.numeric._
 import net.hkdnet.layout._
+import net.hkdnet.structure._
 
 object Spiral {
   val space = Element.elem(" ")
@@ -51,6 +52,12 @@ object Main {
       println(Expr.format(
         BinOp("/", Var("y"),
         BinOp("/", Number(1), Var("x")))))
+    }
+    case Array("queue") => {
+      val q = Queue.empty
+      println(q)
+      println(q.enqueue(1))
+      println(q.enqueue(1).enqueue(2))
     }
   }
 }
