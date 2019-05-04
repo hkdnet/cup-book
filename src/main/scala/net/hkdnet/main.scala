@@ -42,5 +42,10 @@ object Main {
     case Array("sorter") => {
       OrderedMergeSort.examples
     }
+    case Array("queen") => {
+      val answers = Queen.solve(8)
+      println(answers(0).sorted)
+      Queen.show(answers(0).sorted)
+    }
   }
 }
