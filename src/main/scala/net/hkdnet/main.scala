@@ -52,6 +52,7 @@ object Main {
       val xs = List(A, G, T, A)
       println(DNA.fromSeq(xs))
       println(DNA(A, U, G, T, T, A))
+      println(DNA(A, U, G, T, T, A).take(3))
     }
   }
 }

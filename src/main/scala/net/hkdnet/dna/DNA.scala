@@ -1,5 +1,8 @@
 package net.hkdnet.dna
 
+import scala.collection.IndexedSeqLike
+import scala.collection.mutable.{Builder, ArrayBuffer}
+
 abstract class Base
 
 case object A extends Base
@@ -11,9 +14,9 @@ object Base {
   val fromInt: Int => Base = Array(A, T, G, U)
   val toInt: Base => Int = Map(A -> 0, T -> 1, G -> 2, U -> 3)
 }
-
 final class DNA private(val groups: Array[Int],
-                        val length: Int) extends IndexedSeq[Base] {
+                        val length: Int)
+  extends IndexedSeq[Base] with IndexedSeqLike[Base, DNA] {
   import DNA._
 
   def apply(idx: Int): Base = {
@@ -21,6 +24,9 @@ final class DNA private(val groups: Array[Int],
       throw new IndexOutOfBoundsException
     Base.fromInt(groups(idx / N) >> (idx % N * S) & M)
   }
+
+  override def newBuilder: Builder[Base, DNA] =
+    new ArrayBuffer[Base] mapResult fromSeq
 }
 
 object DNA {
