@@ -25,8 +25,7 @@ final class DNA private(val groups: Array[Int],
     Base.fromInt(groups(idx / N) >> (idx % N * S) & M)
   }
 
-  override def newBuilder: Builder[Base, DNA] =
-    new ArrayBuffer[Base] mapResult fromSeq
+  override protected[this] def newBuilder: Builder[Base, DNA] = DNA.newBuilder
 }
 
 object DNA {
@@ -54,5 +53,16 @@ object DNA {
   }
 
   def apply(bases: Base*) = fromSeq(bases)
+
+  def newBuilder: Builder[Base, DNA] =
+    new ArrayBuffer[Base] mapResult fromSeq
+
+  import scala.collection.generic.CanBuildFrom
+
+  implicit def canBuildFrom: CanBuildFrom[DNA, Base, DNA] =
+    new CanBuildFrom[DNA, Base, DNA] {
+      def apply(): Builder[Base, DNA] = newBuilder
+      def apply(from: DNA): Builder[Base, DNA] = newBuilder
+    }
 }
 
