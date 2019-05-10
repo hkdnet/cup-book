@@ -55,6 +55,7 @@ object Main {
       println(DNA(A, U, G, T, T, A).take(3))
       val dna = DNA(T, U, G, G, T)
       println(dna ++ dna)
+      dna foreach println
     }
   }
 }
