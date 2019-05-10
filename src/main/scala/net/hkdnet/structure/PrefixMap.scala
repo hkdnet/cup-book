@@ -50,3 +50,7 @@ class PrefixMap[T] extends mutable.Map[String, T] with mutable.MapLike[String, T
 
   override def empty = new PrefixMap[T]
 }
+
+object PrefixMap {
+  def empty[T] = new PrefixMap[T]
+}

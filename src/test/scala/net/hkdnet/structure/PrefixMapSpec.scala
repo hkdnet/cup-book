@@ -4,7 +4,7 @@ import org.scalatest._
 
 class PrefixMapSpec extends FlatSpec with Matchers {
   "PrefixMap" should "create a new map" in {
-    val m = new PrefixMap[Int]
+    val m = PrefixMap.empty[Int]
     m += ("abc" -> 0)
     m("abc") shouldEqual 0
   }
