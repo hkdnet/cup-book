@@ -53,4 +53,10 @@ class PrefixMap[T] extends mutable.Map[String, T] with mutable.MapLike[String, T
 
 object PrefixMap {
   def empty[T] = new PrefixMap[T]
+
+  def apply[T](kvs: (String, T)*) = {
+    val e = empty[T]
+    for (kv <- kvs) e += kv
+    e
+  }
 }

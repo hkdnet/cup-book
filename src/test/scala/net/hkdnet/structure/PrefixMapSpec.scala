@@ -9,10 +9,7 @@ class PrefixMapSpec extends FlatSpec with Matchers {
     m("abc") shouldEqual 0
   }
   "withPrefix" should "return the subtree" in {
-    val m = new PrefixMap[Int]
-    m += ("abc" -> 0)
-    m += ("abd" -> 1)
-    m += ("al" -> 2)
+    val m = PrefixMap("abc" -> 0, "abd" -> 1, "al" -> 2)
 
     m.get("ab") shouldEqual None
 
