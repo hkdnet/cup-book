@@ -47,5 +47,11 @@ object Main {
       println(answers(0).sorted)
       Queen.show(answers(0).sorted)
     }
+    case Array("dna") => {
+      import net.hkdnet.dna._
+      val xs = List(A, G, T, A)
+      println(DNA.fromSeq(xs))
+      println(DNA(A, U, G, T, T, A))
+    }
   }
 }
