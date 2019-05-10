@@ -1,6 +1,8 @@
 package net.hkdnet.structure
 
 import scala.collection.{immutable, mutable}
+import scala.collection.mutable.{Builder, MapBuilder}
+import scala.collection.generic.CanBuildFrom
 
 class PrefixMap[T] extends mutable.Map[String, T] with mutable.MapLike[String, T, PrefixMap[T]] {
 
@@ -58,5 +60,16 @@ object PrefixMap {
     val e = empty[T]
     for (kv <- kvs) e += kv
     e
+  }
+
+  def newBuilder[T]: Builder[(String, T), PrefixMap[T]] =
+    new MapBuilder[String, T, PrefixMap[T]](empty)
+
+  implicit def canBuildFrom[T]: CanBuildFrom[PrefixMap[T], (String, T), PrefixMap[T]] = {
+    new CanBuildFrom[PrefixMap[_], (String, T), PrefixMap[T]] {
+      override def apply() = newBuilder[T]
+
+      override def apply(from: PrefixMap[_]) = newBuilder[T]
+    }
   }
 }

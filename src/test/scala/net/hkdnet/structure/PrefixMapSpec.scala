@@ -26,4 +26,13 @@ class PrefixMapSpec extends FlatSpec with Matchers {
     // if an entry is added to derived maps, we can get it from the original map.
     m.get("abe") shouldEqual Some(3)
   }
+  "map" should "return a new PrefixMap" in {
+    val m = PrefixMap("abc" -> 1)
+    val mapped = m map ({
+      case (k, v) => (k, v * 2)
+    })
+
+    mapped("abc") shouldEqual 2
+    mapped.withPrefix("ab")("c") shouldEqual 2
+  }
 }
