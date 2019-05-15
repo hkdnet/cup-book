@@ -57,5 +57,9 @@ object Main {
       println(dna ++ dna)
       dna foreach println
     }
+    case Array("parse-expr", expr) => {
+      import net.hkdnet.app.Parser
+      Parser.expr(expr)
+    }
   }
 }
