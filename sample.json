@@ -1,0 +1,10 @@
+{
+  "num": 1,
+  "float": 2.3,
+  "str": "a",
+  "bools": [
+    true,
+    false
+  ],
+  "null": null
+}

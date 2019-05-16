@@ -1,5 +1,7 @@
 package net.hkdnet
 
+import java.io.FileReader
+
 import net.hkdnet.numeric._
 import net.hkdnet.structure._
 import net.hkdnet.app._
@@ -53,6 +55,12 @@ object Main {
     case Array("parse-expr", expr) => {
       import net.hkdnet.app.Parser
       println(Expr.format(Parser.expr(expr)))
+    }
+    case Array("parse-json", filename) => {
+      val f = new FileReader(filename)
+      import net.hkdnet.parser.JsonParser
+      try println(JsonParser.parseAll(JsonParser.value, f))
+      finally f.close()
     }
   }
 }
