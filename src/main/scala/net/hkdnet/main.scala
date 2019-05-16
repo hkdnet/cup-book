@@ -16,21 +16,14 @@ object Main {
       )
     }
     case Array("expr") => {
+      import net.hkdnet.app.Parser
       // (x + y) * z + 1
-      val expr = BinOp(
-        "+",
-        BinOp("*",
-          BinOp("+", Var("x"), Var("y")),
-          Var("z")),
-        Number(1)
-      )
+      val expr = Parser.expr("(x + y) * z + 1")
       println(Expr.format(expr))
       println(Expr.format(Number(1.0)))
       println(Expr.format(UnOp("-", Number(1))))
       println(Expr.format(BinOp("/", Number(1), Var("x"))))
-      println(Expr.format(
-        BinOp("/", Var("y"),
-        BinOp("/", Number(1), Var("x")))))
+      println(Expr.format(Parser.expr("y/(1/x)")))
     }
     case Array("queue") => {
       val q = Queue[Int]()
@@ -59,7 +52,7 @@ object Main {
     }
     case Array("parse-expr", expr) => {
       import net.hkdnet.app.Parser
-      Parser.expr(expr)
+      println(Expr.format(Parser.expr(expr)))
     }
   }
 }
