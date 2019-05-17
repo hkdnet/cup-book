@@ -12,6 +12,7 @@ lazy val root = (project in file("."))
   )
 
 libraryDependencies += "org.scala-lang.modules" %% "scala-parser-combinators" % "1.1.2"
+libraryDependencies += "org.scala-lang.modules" %% "scala-swing" % "2.1.1"
 
 // Uncomment the following for publishing to Sonatype.
 // See https://www.scala-sbt.org/1.x/docs/Using-Sonatype.html for more detail.
