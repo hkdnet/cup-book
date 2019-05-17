@@ -37,6 +37,7 @@ class Model(val height: Int, val width: Int) {
 
 class SpreadSheet(val height: Int, val width: Int) extends ScrollPane {
   val cellModel = new Model(height, width)
+
   import cellModel._
 
   val table = new Table(height, width) {
@@ -46,14 +47,15 @@ class SpreadSheet(val height: Int, val width: Int) extends ScrollPane {
     gridColor = new Color(150, 150, 150)
 
     override def rendererComponent(isSelected: Boolean, focused: Boolean, row: Int, column: Int): Component = {
-      if(hasFocus) new TextField(userData(row, column))
+      if (hasFocus) new TextField(userData(row, column))
       else
         new Label(cells(row)(column).toString) {
-          xAlignment= Alignment.Right
+          xAlignment = Alignment.Right
         }
     }
-    def userData(row: Int, column: Int): String  = {
-      val v = this(row, column)
+
+    def userData(row: Int, column: Int): String = {
+      val v = this (row, column)
       if (v == null) "" else v.toString
     }
   }
