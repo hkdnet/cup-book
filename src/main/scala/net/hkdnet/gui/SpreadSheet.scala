@@ -15,7 +15,7 @@ trait Evaluator {
 
   def evaluate(e: Formula): Double = try {
     e match {
-      case Coord(row, column) => evaluate(cells(row)(column).formula)
+      case Coord(row, column) => cells(row)(column).value
       case Number(v) => v
       case Textual(_) => 0
       case Application(function, arguments) => {
@@ -28,7 +28,7 @@ trait Evaluator {
   }
 
   private def evalList(e: Formula): List[Double] = e match {
-    case Range(_, _) => references(e) map (e => evaluate(e.formula))
+    case Range(_, _) => references(e) map (e => e.value)
     case _ => List(evaluate(e))
   }
 
@@ -57,13 +57,36 @@ trait Arithmetic {
 
 
 class Model(val height: Int, val width: Int) extends Evaluator with Arithmetic {
+  case class ValueChanged(cell: Cell) extends event.Event
+  case class Cell(row: Int, column: Int) extends Publisher {
+    private var v: Double = 0
+    private var f: Formula = Empty
 
-  case class Cell(row: Int, column: Int) {
-    var formula: Formula = Empty
+    def value: Double = v
+
+    def value_=(w: Double) = {
+      if (!(v == w || v.isNaN && w.isNaN) ){
+        v = w
+        publish(ValueChanged(this))
+      }
+    }
+
+    def formula = f
+
+    def formula_=(w: Formula) = {
+      for (c <- references(formula)) deafTo(c)
+      f = w
+      for (c <- references(formula)) listenTo(c)
+      value = evaluate(f)
+    }
 
     override def toString: String = formula match {
-      case Textual(_) => formula.toString
-      case e => evaluate(e).toString
+      case Textual(s) => s
+      case _ => value.toString
+    }
+
+    reactions += {
+      case ValueChanged(_) => value = evaluate(f)
     }
   }
 
@@ -101,7 +124,12 @@ class SpreadSheet(val height: Int, val width: Int) extends ScrollPane {
         for (row <- rows)
           cells(row)(column).formula = FormulaParsers.parse(userData(row, column))
       }
+      case ValueChanged(cell) => {
+        updateCell(cell.row, cell.column)
+      }
     }
+
+    for (row <- cells; cell <- row) listenTo(cell)
   }
 
   val rowHeader =
