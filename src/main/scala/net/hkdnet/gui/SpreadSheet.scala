@@ -1,6 +1,8 @@
 package net.hkdnet.gui
 
 import scala.swing._
+import scala.swing.event.TableUpdated
+import scala.util.parsing.combinator.RegexParsers
 
 trait Formula
 
@@ -26,9 +28,48 @@ case class Application(function: String, arguments: List[Formula]) extends Formu
 
 object Empty extends Textual("")
 
+object FormulaParser extends RegexParsers {
+  def ident: Parser[String] = """[a-zA-Z_]\w*""".r
+
+  def decimal: Parser[String] = """-?\d+(\.\d*)?""".r
+
+  def cell: Parser[Coord] =
+    """[A-Za-z]\d+""".r ^^ { e =>
+      val column = e.charAt(0).toUpper - 'A'
+      val row = e.substring(1).toInt
+      Coord(row, column)
+    }
+
+  def range: Parser[Range] =
+    cell ~ ":" ~ cell ^^ { case c1 ~ ":" ~ c2 => Range(c1, c2) }
+
+  def number: Parser[Number] = decimal ^^ (e => Number(e.toDouble))
+
+  def application: Parser[Application] =
+    ident ~ "(" ~ repsep(expr, ",") ~ ")" ^^ {
+      case f ~ "(" ~ params ~ ")" => Application(f, params)
+    }
+
+  def expr: Parser[Formula] = range | cell | number | application
+
+  def textual: Parser[Textual] = """[^=].*""".r ^^ Textual
+
+  def formula: Parser[Formula] = number | textual | "=" ~> expr
+
+  def parse(input: String): Formula =
+    parseAll(formula, input) match {
+      case Success(result, _) => result
+      case f: NoSuccess => Textual("[" + f.msg + "]")
+    }
+}
+
 class Model(val height: Int, val width: Int) {
 
-  case class Cell(row: Int, column: Int)
+  case class Cell(row: Int, column: Int) {
+    var formula: Formula = Empty
+
+    override def toString: String = formula.toString
+  }
 
   val cells = Array.ofDim[Cell](height, width)
   for (i <- 0 until height; j <- 0 until width)
@@ -57,6 +98,13 @@ class SpreadSheet(val height: Int, val width: Int) extends ScrollPane {
     def userData(row: Int, column: Int): String = {
       val v = this (row, column)
       if (v == null) "" else v.toString
+    }
+
+    reactions += {
+      case TableUpdated(table, rows, column) => {
+        for (row <- rows)
+          cells(row)(column).formula = FormulaParser.parse(userData(row, column))
+      }
     }
   }
 
