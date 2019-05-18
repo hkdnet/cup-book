@@ -1,4 +1,4 @@
-package net.hkdnet.data
+package net.hkdnet.scell
 
 trait Formula
 

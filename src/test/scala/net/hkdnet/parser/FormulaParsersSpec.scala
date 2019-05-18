@@ -1,8 +1,7 @@
 package net.hkdnet.parser
 
 import org.scalatest._
-
-import net.hkdnet.data.{Coord, Range, Number, Application, Textual, Empty}
+import net.hkdnet.scell._
 
 class FormulaParsersSpec extends FlatSpec with Matchers {
   """""" should "return an Empty" in {

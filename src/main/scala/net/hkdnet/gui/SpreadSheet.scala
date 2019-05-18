@@ -1,7 +1,7 @@
 package net.hkdnet.gui
 
-import net.hkdnet.data.{Empty, Formula}
 import net.hkdnet.parser.FormulaParsers
+import net.hkdnet.scell.{Empty, Formula}
 
 import scala.swing._
 import scala.swing.event.TableUpdated

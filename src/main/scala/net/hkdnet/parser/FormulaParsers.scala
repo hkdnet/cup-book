@@ -1,7 +1,7 @@
 package net.hkdnet.parser
 
 import scala.util.parsing.combinator._
-import net.hkdnet.data.{Formula,Coord, Range, Number, Application, Textual, Empty}
+import net.hkdnet.scell.{Application, Coord, Range, Empty, Formula, Number, Textual}
 
 object FormulaParsers extends RegexParsers {
   def ident: Parser[String] = """[a-zA-Z_]\w*""".r
