@@ -1,17 +1,57 @@
 package net.hkdnet.gui
 
 import net.hkdnet.parser.FormulaParsers
-import net.hkdnet.scell.{Empty, Formula}
+import net.hkdnet.scell.{Application, Coord, Empty, Formula, Number, Textual, Range}
 
+import scala.collection.mutable
 import scala.swing._
 import scala.swing.event.TableUpdated
 
-class Model(val height: Int, val width: Int) {
+trait Evaluator {
+  this: Model =>
+  type Op = List[Double] => Double
+
+  val operations = new mutable.HashMap[String, Op]()
+
+  def evaluate(e: Formula): Double = try {
+    e match {
+      case Coord(row, column) => evaluate(cells(row)(column).formula)
+      case Number(v) => v
+      case Textual(_) => 0
+      case Application(function, arguments) => {
+        val argValues = arguments flatMap evalList
+        operations(function)(argValues)
+      }
+    }
+  } catch {
+    case _: Exception => Double.NaN
+  }
+
+  private def evalList(e: Formula): List[Double] = e match {
+    case Range(_, _) => references(e) map (e => evaluate(e.formula))
+    case _ => List(evaluate(e))
+  }
+
+  def references(e: Formula): List[Cell] = e match {
+    case Coord(row, column) => List(cells(row)(column))
+    case Range(Coord(r1, c1), Coord(r2, c2)) => {
+      for (r <- (r1 to r2).toList; c <- c1 to c2) yield cells(r)(c)
+    }
+    case Application(f, args) => args flatMap references
+    case _ => List()
+  }
+}
+
+
+class Model(val height: Int, val width: Int) extends Evaluator {
 
   case class Cell(row: Int, column: Int) {
     var formula: Formula = Empty
 
-    override def toString: String = formula.toString
+    override def toString: String = formula match {
+      case Textual(_) => formula.toString
+      case e => evaluate(e).toString
+    }
   }
 
   val cells = Array.ofDim[Cell](height, width)
